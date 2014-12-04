@@ -1,0 +1,129 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define mp make_pair
+#define clr(x) x.clear()
+
+#ifndef ONLINE_JUDGE
+#define gc getchar
+#else
+#define gc getchar_unlocked
+#endif
+
+const int MOD=1e9+7;
+
+typedef vector<int> vi;
+typedef pair<int,int> ii;
+typedef vector<ii> vii;
+typedef vector<vii> vvii;
+typedef long long LL;
+
+int read_int()
+{
+    char c = gc();
+    while(c<'0' || c>'9') c = gc();
+    int ret = 0;
+    while(c>='0' && c<='9')
+    {
+        ret = 10 * ret + c - 48;
+        c = gc();
+    }
+    return ret;
+}
+//2/12/14
+//shankul khare
+//delete in BST
+//21:32
+
+struct node
+{
+    int data;
+    node*left;
+    node*right;
+    //node*next;
+};
+node*NewNode(int data)
+{
+    //node*temp;
+    node *temp=new node();
+    temp->data=data;
+    temp->left=NULL;
+    temp->right=NULL;
+    //temp->next=NULL;
+    return temp;
+}
+node*find_Max(node*root)
+{
+    if(root->right!=NULL)
+    {
+        root=root->right;
+    }
+    return root;
+}
+node*delete_Bst(node*root,int data)
+{
+    if(root==NULL)
+    {
+        cout<<"no node present int tree";
+        return NULL;
+    }
+    else if(root->data>data)
+    {
+        root->left=delete_Bst(root->left,data);
+    }
+    else if(root->data<data)
+    {
+        root->right=delete_Bst(root->right,data);
+    }
+    else
+    {
+        if(root->left==NULL&&root->right==NULL)
+        {
+            free(root);
+            return NULL;
+        }
+        else if(root->left==NULL)
+        {
+           node*temp=root->right;
+           free(root);
+           return temp;
+        }
+        else if (root->right==NULL)
+        {
+            node*temp=root->left;
+            free(root);
+            return temp;
+        }
+        else
+        {
+            node*temp=find_Max(root->left);
+            root->data=temp->data;
+            root->left=delete_Bst(root->left,temp->data);
+        }
+    }
+
+}
+void print(node*root)
+{
+    if(root==NULL)
+        return;
+    print(root->left);
+    cout<<root->data;
+    print(root->right);
+}
+int main()
+{
+    node*A=NewNode(4);
+    A->left=NewNode(2);
+    A->right=NewNode(8);
+    A->right->left=NewNode(5);
+    A->right->right=NewNode(9);
+    A->right->left->right=NewNode(7);
+    A->right->left->right->left=NewNode(6);
+    print(A);
+    cout<<"\n";
+    delete_Bst(A,8);
+    print(A);
+    return 0;
+}
