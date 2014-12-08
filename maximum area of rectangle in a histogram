@@ -1,0 +1,118 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define mp make_pair
+#define clr(x) x.clear()
+
+#ifndef ONLINE_JUDGE
+#define gc getchar
+#else
+#define gc getchar_unlocked
+#endif
+
+const int MOD=1e9+7;
+
+typedef vector<int> vi;
+typedef pair<int,int> ii;
+typedef vector<ii> vii;
+typedef vector<vii> vvii;
+typedef long long LL;
+
+int read_int()
+{
+    char c = gc();
+    while(c<'0' || c>'9') c = gc();
+    int ret = 0;
+    while(c>='0' && c<='9')
+    {
+        ret = 10 * ret + c - 48;
+        c = gc();
+    }
+    return ret;
+}
+//8/12/14
+//shankul khare
+//maximum area of rectangle in a histogram
+//09:01
+/*
+struct node
+{
+    int data;
+    node*left;
+    node*right;
+    //node*next;
+};
+node*NewNode(int data)
+{
+    //node*temp;
+    node *temp=new node();
+    temp->data=data;
+    temp->left=NULL;
+    temp->right=NULL;
+    //temp->next=NULL;
+    return temp;
+}
+node*lowest_commen_ancestor(node*alpha,node*beta,node*root)
+{
+    while(1)
+    {
+        if((alpha->data<root->data&&beta->data>root->data)||(alpha->data>root->data&&beta->data<root->data))
+            return root;
+        else if(alpha->data<root->data)
+        {
+            root=root->left;
+        }
+        else
+        {
+            root=root->right;
+        }
+    }
+}
+void print(node*root)
+{
+    if(root==NULL)
+        return;
+    print(root->left);
+    cout<<root->data;
+    print(root->right);
+}*/
+struct node
+{
+    int height;
+    int index;
+};
+LL func(int p[],int n)
+{
+    stack<int>st;
+    int maxarea=0;
+    int i=0,curr_area=0;
+    while(i<n)
+    {
+        if((st.empty())||(p[i]>p[st.top()]))
+            st.push(i++);
+        else
+        {
+            int top=st.top();
+            st.pop();
+            int k;
+            if(st.size())
+                k=i-st.top()-1;
+            else
+                k=i;
+            curr_area=p[top]*(k);
+            if(maxarea<curr_area)
+                maxarea=curr_area;
+
+        }
+    }
+    //cout<<maxarea<<"\n";
+    return maxarea;
+}
+int main()
+{
+//    freopen("input.txt","r",stdin);
+    int arr[]={3,2,5,6,1,4,4};
+    cout<<func(arr,7);
+    return 0;
+}
