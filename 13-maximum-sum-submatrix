@@ -1,0 +1,149 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define mp make_pair
+#define clr(x) x.clear()
+
+#ifndef ONLINE_JUDGE
+#define gc getchar
+#else
+#define gc getchar_unlocked
+#endif
+
+const int MOD=1e9+7;
+
+typedef vector<int> vi;
+typedef pair<int,int> ii;
+typedef vector<ii> vii;
+typedef vector<vii> vvii;
+typedef long long LL;
+
+
+int read_int()
+{
+    char c = gc();
+    while(c<'0' || c>'9') c = gc();
+    int ret = 0;
+    while(c>='0' && c<='9')
+    {
+        ret = 10 * ret + c - 48;
+        c = gc();
+    }
+    return ret;
+}
+int Kadane_algo(int arr[],int*start,int*finish,int n)
+{
+    int sum=0,max_sum=0;
+    int l_start=0,l_finish=-1;
+    for(int i=0;i<n;i++)
+    {
+        sum+=arr[i];
+        if(sum<0)
+        {
+            sum=0;
+            l_start=i+1;
+        }
+        if(max_sum<sum)
+        {
+            max_sum=sum;
+            l_finish=i;
+        }
+    }
+    *start=l_start;
+    *finish=l_finish;
+    return max_sum;
+}
+
+int kadane_algo(int arr[],int *start,int *finish,int n)
+{
+    int local_start=0,local_finish=-1;
+    int sum=0,max_sum=0;
+    for(int i=0;i<n;i++)
+    {
+        sum+=arr[i];
+        if(sum<0)
+        {
+            sum=0;
+            local_start=i+1;
+        }
+        if(max_sum<sum)
+        {
+            max_sum=sum;
+            local_finish=i;
+        }
+    }
+    if(local_finish==-1)
+    {
+        sum=INT_MIN;
+        for(int i=0;i<n;i++)
+        {
+            if(sum<arr[i])
+            {
+                sum=arr[i];
+                local_start=i;
+                local_finish=i;
+
+            }
+        }
+        max_sum=sum;
+    }
+    *start=local_start;
+    *finish=local_finish;
+    return max_sum;
+
+
+}
+int arr[50][50];
+LL maximum_sum_submatrix(int col,int row,int *final_left,int *final_right,int *final_top,int *final_bottom)
+{
+    int max_sum=INT_MIN;
+    int sum=0;
+    int ans[row],l_top=0,l_finish=0;
+    for(int left=0;left<col;left++)
+    {
+        memset(ans,0,sizeof(ans));
+
+        for(int right=left;right<col;right++)
+        {
+            for(int i=0;i<row;i++)
+            {
+               ans[i]+=arr[i][right];
+            }
+            sum=kadane_algo(ans,&l_top,&l_finish,row);
+            if(max_sum<sum)
+            {
+                max_sum=sum;
+                *final_bottom=l_finish;
+                *final_left=left;
+                *final_right=right;
+                *final_top=l_top;
+            }
+        }
+    }
+    return max_sum;
+}
+int main()
+{
+    freopen("input.txt","r",stdin);
+    int n,m;
+    cin>>n>>m;
+   // int arr[n][m];
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        cin>>arr[i][j];
+    }
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        cout<<arr[i][j];
+    }
+    //int start,finish;
+    //cout<<Kadane_algo(arr,&start,&finish,n);
+    //cout<<"\n"<<start<<"\n"<<finish<<"\n";
+    int left,right,bottom,top;
+    cout<<maximum_sum_submatrix(m,n,&left,&right,&top,&bottom)<<"\n";
+    cout<<top<<"\n"<<left<<"\n"<<bottom<<"\n"<<right;
+    return 0;
+}
