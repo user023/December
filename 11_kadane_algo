@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define mp make_pair
+#define clr(x) x.clear()
+
+#ifndef ONLINE_JUDGE
+#define gc getchar
+#else
+#define gc getchar_unlocked
+#endif
+
+const int MOD=1e9+7;
+
+typedef vector<int> vi;
+typedef pair<int,int> ii;
+typedef vector<ii> vii;
+typedef vector<vii> vvii;
+typedef long long LL;
+
+
+int read_int()
+{
+    char c = gc();
+    while(c<'0' || c>'9') c = gc();
+    int ret = 0;
+    while(c>='0' && c<='9')
+    {
+        ret = 10 * ret + c - 48;
+        c = gc();
+    }
+    return ret;
+}
+int kadane_algo(int arr[],int *start,int *finish,int n)
+{
+    int local_start=0,local_finish=-1;
+    int sum=0,max_sum=0;
+    for(int i=0;i<n;i++)
+    {
+        sum+=arr[i];
+        if(sum<0)
+        {
+            sum=0;
+            local_start=i+1;
+        }
+        if(max_sum<sum)
+        {
+            max_sum=sum;
+            local_finish=i;
+        }
+    }
+    if(local_finish==-1)
+    {
+        sum=INT_MIN;
+        for(int i=0;i<n;i++)
+        {
+            if(sum<arr[i])
+            {
+                sum=arr[i];
+                local_start=i;
+                local_finish=i;
+
+            }
+        }
+        max_sum=sum;
+    }
+    *start=local_start;
+    *finish=local_finish;
+    return max_sum;
+
+
+}
+int main()
+{
+    freopen("input.txt","r",stdin);
+    int n;
+    cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++)
+    {
+        cin>>arr[i];
+    }
+    int start,finish;
+    cout<<kadane_algo(arr,&start,&finish,n);
+    cout<<"\n"<<start<<"\n"<<finish<<"\n";
+    return 0;
+}
