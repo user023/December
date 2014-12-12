@@ -1,0 +1,30 @@
+
+struct trie_node
+{
+    char data;
+    bool Is_end_of_the_string;
+    trie_node*child[26];
+};
+trie_node* insert_in_trie(trie_node*root,char*word)
+{
+    if(!*word) return NULL;
+    if(root==NULL)
+    {
+        trie_node*temp=new trie_node();
+        temp->data=*word;
+        for(int i=0;i<26;i++)
+        {
+            temp->child[i]=NULL;
+        }
+        if(!*(word+1))
+            temp->Is_end_of_the_string=true;
+        else
+            {
+                temp->Is_end_of_the_string=false;
+                temp->child[*word-'a']=insert_in_trie(root->child[*word-'a'],word+1);
+            }
+            return temp;
+    }
+    root->child[*word-'a']=insert_in_trie(root->child[*word-'a'],word+1);
+    return root;
+}
