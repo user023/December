@@ -1,0 +1,21 @@
+struct trie_node
+{
+    char data;
+    bool Is_end_of_the_string;
+    trie_node*child[26];
+};
+bool trie_search(trie_node*root,char*word)
+{
+    if(!root)return false;
+    if(!word)
+    {
+        if(root->Is_end_of_the_string==true)
+            return true;
+        else
+            return false;
+    }
+    else if(root->data==*word)
+        return trie_search(root->child[*word-'a'],word+1);
+    else
+        return false;
+}
