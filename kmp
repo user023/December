@@ -1,0 +1,136 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define mp make_pair
+#define clr(x) x.clear()
+
+#ifndef ONLINE_JUDGE
+#define gc getchar
+#else
+#define gc getchar_unlocked
+#endif
+
+const int MOD=1e9+7;
+
+typedef vector<int> vi;
+typedef pair<int,int> ii;
+typedef vector<ii> vii;
+typedef vector<vii> vvii;
+typedef long long LL;
+
+int read_int()
+{
+    char c = gc();
+    while(c<'0' || c>'9') c = gc();
+    int ret = 0;
+    while(c>='0' && c<='9')
+    {
+        ret = 10 * ret + c - 48;
+        c = gc();
+    }
+    return ret;
+}
+//7/12/14
+//shankul khare
+//maximum contigious sum with out slectimg 2 contigious numbers
+//16:12
+/*
+struct node
+{
+    int data;
+    node*left;
+    node*right;
+    //node*next;
+};
+node*NewNode(int data)
+{
+    //node*temp;
+    node *temp=new node();
+    temp->data=data;
+    temp->left=NULL;
+    temp->right=NULL;
+    //temp->next=NULL;
+    return temp;
+}
+node*lowest_commen_ancestor(node*alpha,node*beta,node*root)
+{
+    while(1)
+    {
+        if((alpha->data<root->data&&beta->data>root->data)||(alpha->data>root->data&&beta->data<root->data))
+            return root;
+        else if(alpha->data<root->data)
+        {
+            root=root->left;
+        }
+        else
+        {
+            root=root->right;
+        }
+    }
+}
+void print(node*root)
+{
+    if(root==NULL)
+        return;
+    print(root->left);
+    cout<<root->data;
+    print(root->right);
+}*/
+vector<int>fail_func(string pattern)
+{
+    int n=pattern.size();
+    vector<int>vec(n);
+    int i=1,j=0;
+    vec[0]=0;
+    while(i<n)
+    {
+        if(pattern[i]==pattern[j])
+        {
+            vec[i]=j+1;
+            i++;
+            j++;
+        }
+        else if(j>0)
+            j=vec[j-1];
+        else
+        {
+            vec[i]=0;
+            i++;
+        }
+    }
+    return vec;
+}
+int KMP(string text,string pattern)
+{
+    int n=text.size();
+    int m=pattern.size();
+    vector<int>fail_function(m);
+    fail_function=fail_func(pattern);
+    int i=0,j=0;
+    while(i<n)
+    {
+        if(text[i]==pattern[j])
+        {
+            if(j==m-1)
+                return i-j;
+            else
+            {
+                i++;
+                j++;
+            }
+        }
+        else if(j>0)
+            j=fail_function[j-1];
+        else
+            i++;
+    }
+    return -1;
+}
+int main()
+{
+    string a="bacbabababacaca";
+    string b="ababaca";
+    cout<<KMP(a,b);
+    return 0;
+}
